@@ -1,17 +1,13 @@
 import {CommonThunkType} from "../store/store";
-import {authAPI} from "../api/api";
+import {authAPI, TodolistDomainType} from "../api/api";
 import {setIsLoggedInAC} from "./login-reducer";
 
 
-const InitialState = {
-initialized: false
-}
+const InitialState: TodolistDomainType[] = []
 
 //reducer
-export const appReducer = (state: AppStateType = InitialState, action: AppActionType): AppStateType =>{
+export const todolistsReducer = (state: TodolistDomainType[] = InitialState, action: TodolistsActionType): TodolistDomainType[] =>{
   switch (action.type) {
-    case "SET-INITIALIZED":
-      return {...state, initialized: action.value}
     default:
       return state
   }
@@ -31,7 +27,5 @@ export const initializedAppTC = (): CommonThunkType => (dispatch)=>{
 }
 
 //types
-export type AppStateType = {
-  initialized: boolean
-}
-export type AppActionType = ReturnType<typeof setAppInitializedAC>
+
+export type TodolistsActionType = any

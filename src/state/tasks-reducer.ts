@@ -1,17 +1,14 @@
 import {CommonThunkType} from "../store/store";
-import {authAPI} from "../api/api";
+import {authAPI, TaskType} from "../api/api";
 import {setIsLoggedInAC} from "./login-reducer";
 
 
-const InitialState = {
-initialized: false
-}
+const InitialState: TasksStateType = {}
 
 //reducer
-export const appReducer = (state: AppStateType = InitialState, action: AppActionType): AppStateType =>{
+export const tasksReducer = (state: TasksStateType = InitialState, action: TasksActionType): TasksStateType =>{
   switch (action.type) {
-    case "SET-INITIALIZED":
-      return {...state, initialized: action.value}
+
     default:
       return state
   }
@@ -31,7 +28,7 @@ export const initializedAppTC = (): CommonThunkType => (dispatch)=>{
 }
 
 //types
-export type AppStateType = {
-  initialized: boolean
+export type TasksStateType = {
+[key: string]: TaskType[]
 }
-export type AppActionType = ReturnType<typeof setAppInitializedAC>
+export type TasksActionType = any

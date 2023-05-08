@@ -1,28 +1,29 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
+import {Header} from "../components/Header";
+import {useCommonDispatch, useCommonSelector} from "../store/store";
+import {initializedAppTC} from "../state/app-reducer";
+import {CircularProgress, LinearProgress} from "@mui/material";
 
-function App() {
+type AppPropsType={}
+
+export const App: React.FC<AppPropsType> = (props) => {
+  const dispatch = useCommonDispatch()
+  const initialized = useCommonSelector(state => state.app.initialized)
+
+  useEffect(()=>{
+    dispatch(initializedAppTC())
+  }, [])
+
+  if (!initialized){
+    return <LinearProgress/>
+  }
+
   return (
-     <div className="App">
-       <div>
-         <h3>What to learn</h3>
-         <div>
-           <input/>
-           <button>+</button>
-         </div>
-         <ul>
-           <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-           <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-           <li><input type="checkbox" checked={false}/> <span>React</span></li>
-         </ul>
-         <div>
-           <button>All</button>
-           <button>Active</button>
-           <button>Completed</button>
-         </div>
-       </div>
+     <div>
+       <Header/>
      </div>
   );
 }
 
-export default App;
+
