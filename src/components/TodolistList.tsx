@@ -15,38 +15,48 @@ export const TodolistList: React.FC<TodolistListPropsType> = (props) => {
   const isLoggedIn = useCommonSelector<boolean>(state => state.auth.isLoggedIn)
 
 
-  const addTodolist = ()=>{}
-  const changeTodolistTitle = ()=>{}
-  const removeTodolist = ()=>{}
+  const addTodolist = () => {
+  }
+  const changeTodolistTitle = () => {
+  }
+  const removeTodolist = () => {
+  }
+  const changeTodolistFilter = () => {
+  }
 
-  const addTask = ()=>{}
-  const removeTask = ()=>{}
-  const changeTaskTitle = ()=>{}
-  const changeTaskStatus = ()=>{}
-  const changeTaskFilter = ()=>{}
+  const addTask = () => {
+  }
+  const removeTask = () => {
+  }
+  const changeTaskTitle = () => {
+  }
+  const changeTaskStatus = () => {
+  }
 
-/*  if(!isLoggedIn) {
-    return redirect('/login')
-  }*/
+
+  /*  if(!isLoggedIn) {
+      return redirect('/login')
+    }*/
 
   return (
-  <div>
-    <AddItemForm addItem={addTodolist}/>
-    {todolists.map(tl => {
-         const tasksForTodolist = tasks[tl.id]
+     <div>
+       <AddItemForm addItem={addTodolist}/>
+       {todolists.map(tl => {
+            const tasksForTodolist = tasks[tl.id]
             return <Todolist key={tl.id}
-                                   todolist={tl}
-                                   tasks={tasksForTodolist}
-                                   changeTodolistTitle={changeTodolistTitle}
-                                   removeTodolist={removeTodolist}
-                                   addTask={addTask}
-                                   removeTask={removeTask}
-                                   changeTaskTitle={changeTaskTitle}
-                                   changeTaskStatus={changeTaskStatus}
-                                   changeTaskFilter={changeTaskFilter}
-       />
-    }
-    )}
-  </div>
+                             todolist={tl}
+                             tasks={tasksForTodolist}
+                             changeTodolistTitle={changeTodolistTitle}
+                             removeTodolist={removeTodolist}
+                             changeTodolistFilter={changeTodolistFilter}
+                             addTask={addTask}
+                             removeTask={removeTask}
+                             changeTaskTitle={changeTaskTitle}
+                             changeTaskStatus={changeTaskStatus}
+
+            />
+          }
+       )}
+     </div>
   )
 }
