@@ -1,6 +1,7 @@
 import {CommonThunkType} from "../store/store";
-import {authAPI, TaskType} from "../api/api";
+import {authAPI, taskAPI, TaskType} from "../api/api";
 import {setIsLoggedInAC} from "./login-reducer";
+import {addTodolistAC} from "./todolists-reducer";
 
 
 const InitialState: TasksStateType = {}
@@ -8,27 +9,30 @@ const InitialState: TasksStateType = {}
 //reducer
 export const tasksReducer = (state: TasksStateType = InitialState, action: TasksActionType): TasksStateType =>{
   switch (action.type) {
-
+    case "todolist/ADD-TODOLIST":
+      return {...state,[action.todolist.id]:[]}
+    case "task/ADD-TASK":
+      return {...state,[action.task.todoListId]:[action.task, ...state[action.task.todoListId]]}
     default:
       return state
   }
 }
 
 //actions
-export const setAppInitializedAC = (value: boolean)=>({type: 'SET-INITIALIZED', value} as const)
+export const addTaskAC = (task: TaskType)=>({type: 'task/ADD-TASK', task} as const)
 
 //thunks
-export const initializedAppTC = (): CommonThunkType => (dispatch)=>{
-  authAPI.me().then(res=>{
-    if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(true))
-    }
-    dispatch(setAppInitializedAC(true))
-  })
+export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch)=>{
+ taskAPI.addTask(todolistId, title).then(res=>{
+   if(res.resultCode === 0) {
+     dispatch(addTaskAC(res.data.item))
+   }
+ })
 }
 
 //types
 export type TasksStateType = {
 [key: string]: TaskType[]
 }
-export type TasksActionType = any
+export type TasksActionType = ReturnType<typeof addTodolistAC>
+| ReturnType<typeof addTaskAC>

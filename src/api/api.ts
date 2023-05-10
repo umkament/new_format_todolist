@@ -24,6 +24,18 @@ export let authAPI = {
   }
 }
 
+export let todolistsAPI = {
+  addTodolist(title: string){
+    return instance.post<ResponseType<{item: TodolistType}>>('todo-lists', {title})
+  }
+}
+
+export let taskAPI = {
+  addTask(todolistId: string, title: string){
+    return instance.post<{title: string}, ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title})
+  }
+}
+
 //types
 export type ResponseType<D={}> = {
   resultCode: number,
@@ -65,6 +77,7 @@ export enum TaskStatuses {
   Draft
 }
 export type FilterValueType = 'all' | 'active' | 'completed'
+
 export type TodolistType = {
   id: string
   addedDate: string

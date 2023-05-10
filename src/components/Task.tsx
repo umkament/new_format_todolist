@@ -12,6 +12,7 @@ type TaskPropsType = {
   removeTask: (todolistID: string, taskID: string) => void
 }
 export const Task: React.FC<TaskPropsType> = React.memo((props) => {
+  console.log('Task')
 //нужно ли оборачивать в useCallback и эти два хэндлера
   const removeTaskHandler = () => {
     props.removeTask(props.todolistID, props.task.id)
@@ -23,7 +24,7 @@ export const Task: React.FC<TaskPropsType> = React.memo((props) => {
     props.changeTaskTitle(props.todolistID, props.task.id, newTitle)
   }, [props.changeTaskTitle, props.todolistID, props.task.id])
 
-  return <div>
+  return <div key={props.task.id}>
     <IconButton onClick={removeTaskHandler}>
       <Delete/>
     </IconButton>
