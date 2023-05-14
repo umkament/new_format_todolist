@@ -6,7 +6,7 @@ import {ChangeEvent, KeyboardEvent, useState} from "react";
 type AddItemFormPropsType = {
   addItem: (title: string)=>void
 }
-export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
   let [title, setTitle] = useState<string>('')
   let [error, setError] = useState<string>('')
 
@@ -17,7 +17,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
   const keyPressHandler = (e: KeyboardEvent<HTMLDivElement>) => {
     setError('')
     if (e.charCode === 13 && title.trim() !== '') {
-      props.addItem(title.trim())
+      addItem(title.trim())
       setTitle('')
     }
     if (e.charCode===13 && title.trim() === ''){
@@ -27,7 +27,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
 
   const addTitleButtonHandler = () => {
   if (title.trim() !== '') {
-    props.addItem(title.trim())
+    addItem(title.trim())
     setTitle('')
   } else {
     setError('title is required')
