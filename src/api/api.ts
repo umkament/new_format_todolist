@@ -42,6 +42,9 @@ export let taskAPI = {
   },
   removeTask(todolistId: string, taskId: string){
     return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+  },
+  setTasks(todolistId: string){
+    return instance.get<TaskContentType>(`todo-lists/${todolistId}/tasks`)
   }
 }
 

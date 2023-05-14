@@ -30,6 +30,8 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
       })
       return stateCopy
     }
+    case "task/SET-TASK":
+      return {...state, [action.todolistId]:action.tasks}
     default:
       return state
   }
@@ -38,6 +40,7 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
 //actions
 export const addTaskAC = (task: TaskType)=>({type: 'task/ADD-TASK', task} as const)
 export const removeTaskAC = (todolistId: string, taskId: string)=>({type: 'task/REMOVE-TASK', todolistId, taskId} as const)
+export const setTasksAC = (todolistId: string, tasks: TaskType[])=>({type: 'task/SET-TASK', todolistId, tasks} as const)
 
 //thunks
 export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch)=>{
@@ -54,7 +57,11 @@ export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkTyp
     }
   })
 }
-
+export const setTasksTC = (todolistId: string): CommonThunkType =>(dispatch)=>{
+  taskAPI.setTasks(todolistId).then(res=>{
+    dispatch(setTasksAC(todolistId, res.data.items))
+  })
+}
 //types
 export type TasksStateType = {
 [key: string]: TaskType[]
@@ -64,3 +71,4 @@ export type TasksActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof removeTodolistAC>
 | ReturnType<typeof removeTaskAC>
 | ReturnType<typeof setTodolistsAC>
+| ReturnType<typeof setTasksAC>
