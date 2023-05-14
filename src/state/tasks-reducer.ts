@@ -1,7 +1,7 @@
 import {CommonThunkType} from "../store/store";
 import {authAPI, taskAPI, TaskType} from "../api/api";
 import {setIsLoggedInAC} from "./login-reducer";
-import {addTodolistAC} from "./todolists-reducer";
+import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
 
 
 const InitialState: TasksStateType = {}
@@ -15,6 +15,10 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
       console.log(action.task)
       console.log(action)
       return {...state,[action.task.todoListId]:[action.task, ...state[action.task.todoListId]]}
+    case "todolist/REMOVE-TODOLIST":
+      const stateCopy = {...state}
+      delete stateCopy[action.todolistId]
+      return stateCopy
     default:
       return state
   }
@@ -38,3 +42,4 @@ export type TasksStateType = {
 }
 export type TasksActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof addTaskAC>
+| ReturnType<typeof removeTodolistAC>

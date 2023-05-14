@@ -11,6 +11,8 @@ export const todolistsReducer = (state: TodolistDomainType[] = InitialState, act
     case "todolist/ADD-TODOLIST":
       // не забыть про entityStatus: 'idle'
       return [{...action.todolist, filter: 'all'}, ...state] // не понимаю почему копию тудулиста добавляем?
+    case "todolist/REMOVE-TODOLIST":
+      return state.filter(tl => tl.id !== action.todolistId)
     default:
       return state
   }
@@ -28,6 +30,13 @@ todolistsAPI.addTodolist(title).then(res =>{
     dispatch(addTodolistAC(res.data.data.item))
   }
 })
+}
+export const removeTodolistTC = (todolistId: string): CommonThunkType =>(dispatch) => {
+ todolistsAPI.removeTodolist(todolistId).then(res=>{
+   if(res.data.resultCode===0){
+     dispatch(removeTodolistAC(todolistId))
+   }
+ })
 }
 
 //types

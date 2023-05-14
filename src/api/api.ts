@@ -27,6 +27,9 @@ export let authAPI = {
 export let todolistsAPI = {
   addTodolist(title: string){
     return instance.post<ResponseType<{item: TodolistType}>>('todo-lists', {title})
+  },
+  removeTodolist(todolistId: string){
+    return instance.delete<ResponseType>(`todo-lists/${todolistId}`)
   }
 }
 

@@ -5,7 +5,7 @@ import {TodolistDomainType} from "../api/api";
 import {Todolist} from "./Todolist";
 import {redirect} from "react-router-dom";
 import {addTaskTC, TasksStateType} from "../state/tasks-reducer";
-import {addTodolistTC} from "../state/todolists-reducer";
+import {addTodolistTC, removeTodolistTC} from "../state/todolists-reducer";
 
 type TodolistListPropsType = {}
 export const TodolistList: React.FC<TodolistListPropsType> =  (props) => {
@@ -21,8 +21,9 @@ export const TodolistList: React.FC<TodolistListPropsType> =  (props) => {
   }, [])
   const changeTodolistTitle = () => {
   }
-  const removeTodolist = () => {
-  }
+  const removeTodolist = useCallback( (todolistId: string) => {
+    dispatch(removeTodolistTC(todolistId))
+  }, [])
   const changeTodolistFilter = () => {
   }
 
