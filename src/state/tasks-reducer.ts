@@ -19,6 +19,10 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
       const stateCopy = {...state}
       delete stateCopy[action.todolistId]
       return stateCopy
+    case "task/REMOVE-TASK":
+      //возвращаем копию стэйта, в которой перезаписываем свойство [action.todolistId]
+       // на то, что было в стэйте изначально, только отфильтрованное по принципу отсеивания удаленной таски
+      return {...state, [action.todolistId]:state[action.todolistId].filter(t => t.id !== action.taskId)}
     default:
       return state
   }
@@ -26,6 +30,7 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
 
 //actions
 export const addTaskAC = (task: TaskType)=>({type: 'task/ADD-TASK', task} as const)
+export const removeTaskAC = (todolistId: string, taskId: string)=>({type: 'task/REMOVE-TASK', todolistId, taskId} as const)
 
 //thunks
 export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch)=>{
@@ -35,6 +40,13 @@ export const addTaskTC = (todolistId: string, title: string): CommonThunkType =>
    }
  })
 }
+export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkType => (dispatch)=>{
+  taskAPI.removeTask(todolistId,taskId).then(res=>{
+    if (res.data.resultCode===0){
+      dispatch(removeTaskTC(todolistId,taskId))
+    }
+  })
+}
 
 //types
 export type TasksStateType = {
@@ -43,3 +55,4 @@ export type TasksStateType = {
 export type TasksActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof addTaskAC>
 | ReturnType<typeof removeTodolistAC>
+| ReturnType<typeof removeTaskAC>
