@@ -1,11 +1,11 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {useCommonDispatch, useCommonSelector} from "../store/store";
 import {TodolistDomainType} from "../api/api";
 import {Todolist} from "./Todolist";
 import {redirect} from "react-router-dom";
 import {addTaskTC, TasksStateType} from "../state/tasks-reducer";
-import {addTodolistTC, removeTodolistTC} from "../state/todolists-reducer";
+import {addTodolistTC, removeTodolistTC, setTodolistsTC} from "../state/todolists-reducer";
 
 type TodolistListPropsType = {}
 export const TodolistList: React.FC<TodolistListPropsType> =  (props) => {
@@ -14,6 +14,10 @@ export const TodolistList: React.FC<TodolistListPropsType> =  (props) => {
   const todolists = useCommonSelector<TodolistDomainType[]>(state => state.todolists)
   const tasks = useCommonSelector<TasksStateType>(state => state.tasks)
   const isLoggedIn = useCommonSelector<boolean>(state => state.auth.isLoggedIn)
+
+useEffect(()=>{
+  dispatch(setTodolistsTC())
+},[])
 
 
   const addTodolist = useCallback( (title: string) => {

@@ -1,7 +1,7 @@
 import {CommonThunkType} from "../store/store";
 import {authAPI, taskAPI, TaskType} from "../api/api";
 import {setIsLoggedInAC} from "./login-reducer";
-import {addTodolistAC, removeTodolistAC} from "./todolists-reducer";
+import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
 
 
 const InitialState: TasksStateType = {}
@@ -23,6 +23,13 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
       //возвращаем копию стэйта, в которой перезаписываем свойство [action.todolistId]
        // на то, что было в стэйте изначально, только отфильтрованное по принципу отсеивания удаленной таски
       return {...state, [action.todolistId]:state[action.todolistId].filter(t => t.id !== action.taskId)}
+    case "todolist/SET-TODOLISTS": {
+      const stateCopy = {...state}
+      action.todolists.forEach(tl=>{
+        stateCopy[tl.id]=[]
+      })
+      return stateCopy
+    }
     default:
       return state
   }
@@ -56,3 +63,4 @@ export type TasksActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof addTaskAC>
 | ReturnType<typeof removeTodolistAC>
 | ReturnType<typeof removeTaskAC>
+| ReturnType<typeof setTodolistsAC>

@@ -30,6 +30,9 @@ export let todolistsAPI = {
   },
   removeTodolist(todolistId: string){
     return instance.delete<ResponseType>(`todo-lists/${todolistId}`)
+  },
+  setTodolists(){
+return instance.get<TodolistType[]>('todo-lists')
   }
 }
 
