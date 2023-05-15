@@ -6,8 +6,11 @@ import {Todolist} from "./Todolist";
 import {redirect} from "react-router-dom";
 import {addTaskTC, TasksStateType} from "../state/tasks-reducer";
 import {addTodolistTC, removeTodolistTC, setTodolistsTC} from "../state/todolists-reducer";
+import {Grid, Paper} from "@mui/material";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 type TodolistListPropsType = {}
+
 export const TodolistList: React.FC<TodolistListPropsType> =  (props) => {
   console.log('Todolist_List')
   const dispatch = useCommonDispatch()
@@ -48,12 +51,26 @@ useEffect(()=>{
       return redirect('/login')
     }*/
 
-  return (
-     <div>
+  return <>
+     <Grid container
+           direction="column"
+           justifyContent="center"
+           alignItems="flex-start"
+           style={{padding: '25px'}}
+     >
        <AddItemForm addItem={addTodolist}/>
+     </Grid>
+  <Grid container
+        style={{padding: '25px'}}
+  >
        {todolists.map(tl => {
-            const tasksForTodolist = tasks[tl.id]
-            return <Todolist key={tl.id}
+            let tasksForTodolist = tasks[tl.id]
+            return <Grid item
+                         style={{padding: '10px'}}>
+         <Paper elevation={5}
+                style={{padding: '10px'}}
+         >
+           <Todolist key={tl.id}
                              todolist={tl}
                              tasks={tasksForTodolist}
                              changeTodolistTitle={changeTodolistTitle}
@@ -65,8 +82,10 @@ useEffect(()=>{
                              changeTaskStatus={changeTaskStatus}
 
             />
+            </Paper>
+            </Grid>
           }
        )}
-     </div>
-  )
+     </Grid>
+     </>
 }
