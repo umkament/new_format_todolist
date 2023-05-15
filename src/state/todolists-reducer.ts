@@ -24,6 +24,7 @@ export const todolistsReducer = (state: TodolistDomainType[] = InitialState, act
 export const addTodolistAC = (todolist: TodolistType)=>({type: 'todolist/ADD-TODOLIST', todolist} as const)
 export const removeTodolistAC = (todolistId: string)=>({type: 'todolist/REMOVE-TODOLIST', todolistId} as const)
 export const setTodolistsAC = (todolists: TodolistType[])=>({type: 'todolist/SET-TODOLISTS', todolists} as const)
+export const changeTodolistTitleAC = (todolistId: string, newTodoTitle: string)=>({type: 'todolist/CHANGE-TODOLIST-TITLE', todolistId, newTodoTitle} as const)
 
 //thunks
 // в дальнейшем не забыть в санки добавить статус загрузки, ошибки и .catch
@@ -46,9 +47,16 @@ export const setTodolistsTC = (): CommonThunkType =>(dispatch)=>{
     dispatch(setTodolistsAC(res.data))
   })
 }
+export const changeTodolistTitleTC = (todolistId: string, newTodoTitle: string): CommonThunkType=>(dispatch)=>{
+  todolistsAPI.updateTodolist(todolistId, newTodoTitle).then(res=>{
+    if(res.data.resultCode === 0){
+      dispatch(changeTodolistTitleAC(todolistId,newTodoTitle))
+    }
+  })
+}
 
 //types
-
 export type TodolistsActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof removeTodolistAC>
 | ReturnType<typeof setTodolistsAC>
+| ReturnType<typeof changeTodolistTitleAC>

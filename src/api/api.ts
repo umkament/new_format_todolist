@@ -33,6 +33,9 @@ export let todolistsAPI = {
   },
   setTodolists(){
 return instance.get<TodolistType[]>('todo-lists')
+  },
+  updateTodolist(todolistId: string, title: string){
+    return instance.put<ResponseType>(`todo-lists/${todolistId}`, {title})
   }
 }
 
