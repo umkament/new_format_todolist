@@ -1,5 +1,5 @@
 import {CommonThunkType} from "../store/store";
-import {TodolistDomainType, todolistsAPI, TodolistType} from "../api/api";
+import {FilterValueType, TodolistDomainType, todolistsAPI, TodolistType} from "../api/api";
 
 
 
@@ -17,6 +17,8 @@ export const todolistsReducer = (state: TodolistDomainType[] = InitialState, act
       return action.todolists.map(tl=>({...tl, filter: 'all'}))
     case "todolist/CHANGE-TODOLIST-TITLE":
       return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.newTodoTitle} : tl)
+    case "todolist/CHANGE-TODOLIST-FILTER":
+      return state.map(tl => tl.id === action.todolistId ? {...tl, filter: action.filter} : tl)
     default:
       return state
   }
@@ -27,6 +29,7 @@ export const addTodolistAC = (todolist: TodolistType)=>({type: 'todolist/ADD-TOD
 export const removeTodolistAC = (todolistId: string)=>({type: 'todolist/REMOVE-TODOLIST', todolistId} as const)
 export const setTodolistsAC = (todolists: TodolistType[])=>({type: 'todolist/SET-TODOLISTS', todolists} as const)
 export const changeTodolistTitleAC = (todolistId: string, newTodoTitle: string)=>({type: 'todolist/CHANGE-TODOLIST-TITLE', todolistId, newTodoTitle} as const)
+export const changeTodolistFilterAC = (todolistId: string, filter: FilterValueType)=>({type: 'todolist/CHANGE-TODOLIST-FILTER', todolistId, filter} as const)
 
 //thunks
 // в дальнейшем не забыть в санки добавить статус загрузки, ошибки и .catch
@@ -62,3 +65,4 @@ export type TodolistsActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof removeTodolistAC>
 | ReturnType<typeof setTodolistsAC>
 | ReturnType<typeof changeTodolistTitleAC>
+| ReturnType<typeof changeTodolistFilterAC>

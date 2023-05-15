@@ -1,11 +1,17 @@
 import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {useCommonDispatch, useCommonSelector} from "../store/store";
-import {TodolistDomainType} from "../api/api";
+import {FilterValueType, TodolistDomainType} from "../api/api";
 import {Todolist} from "./Todolist";
 import {redirect} from "react-router-dom";
 import {addTaskTC, removeTaskTC, TasksStateType} from "../state/tasks-reducer";
-import {addTodolistTC, changeTodolistTitleTC, removeTodolistTC, setTodolistsTC} from "../state/todolists-reducer";
+import {
+  addTodolistTC,
+  changeTodolistFilterAC,
+  changeTodolistTitleTC,
+  removeTodolistTC,
+  setTodolistsTC
+} from "../state/todolists-reducer";
 import {Grid, Paper} from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2";
 
@@ -29,8 +35,9 @@ useEffect(()=>{
   const removeTodolist = useCallback( (todolistId: string) => {
     dispatch(removeTodolistTC(todolistId))
   }, [])
-  const changeTodolistFilter = () => {
-  }
+  const changeTodolistFilter = useCallback( (todolistId: string, filter: FilterValueType) => {
+    dispatch(changeTodolistFilterAC(todolistId, filter))
+  }, [])
   const changeTodolistTitle = useCallback((todolistId: string, newTodoTitle: string)=>{
     dispatch(changeTodolistTitleTC(todolistId, newTodoTitle))
   }, [])
