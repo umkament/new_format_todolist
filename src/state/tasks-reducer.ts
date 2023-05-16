@@ -1,6 +1,5 @@
-import {CommonThunkType} from "../store/store";
-import {authAPI, taskAPI, TaskType} from "../api/api";
-import {setIsLoggedInAC} from "./login-reducer";
+import {CommonThunkType, RootStateType} from "../store/store";
+import {taskAPI, TaskType, UpdateTaskModelType} from "../api/api";
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
 
 
@@ -32,6 +31,7 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
     }
     case "task/SET-TASK":
       return {...state, [action.todolistId]:action.tasks}
+
     default:
       return state
   }
@@ -41,6 +41,8 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
 export const addTaskAC = (task: TaskType)=>({type: 'task/ADD-TASK', task} as const)
 export const removeTaskAC = (todolistId: string, taskId: string)=>({type: 'task/REMOVE-TASK', todolistId, taskId} as const)
 export const setTasksAC = (todolistId: string, tasks: TaskType[])=>({type: 'task/SET-TASK', todolistId, tasks} as const)
+export const updateTaskAC = (todolistId: string, taskId: string, variantModel: VariantUpdateTaskModelType)=>({type: 'task/UPDATE-TASK', todolistId, taskId, variantModel} as const)
+
 
 //thunks
 export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch)=>{
@@ -62,9 +64,49 @@ export const setTasksTC = (todolistId: string): CommonThunkType =>(dispatch)=>{
     dispatch(setTasksAC(todolistId, res.data.items))
   })
 }
+export const updateTaskTC = (todolistId: string, taskId: string, variantModel: VariantUpdateTaskModelType): CommonThunkType =>{
+  return (dispatch, getState: ()=>RootStateType)=> {
+    const state = getState()
+    const task = state.tasks[todolistId].find(t => t.id === taskId)
+    //это условие нужно для apiTaskModel,
+    // поскольку без этого условия данный объект выделяет красным все такски
+    if (!task) {
+      console.warn('task undefined')
+      return;
+    }
+    const apiTaskModel: UpdateTaskModelType = {
+      description: task.description,
+      title: task.title,
+      status: task.status,
+      priority: task.priority,
+      startDate: task.startDate,
+      deadline: task.deadline,
+      completed: task.completed,
+      ...variantModel
+    }
+    taskAPI.updateTask(todolistId, taskId, apiTaskModel)
+       .then(res => {
+      if (res.data.resultCode === 0) {
+        dispatch(updateTaskAC(todolistId, taskId, apiTaskModel))
+      }
+    })
+  }
+  }
+
+
 //types
 export type TasksStateType = {
 [key: string]: TaskType[]
+}
+
+export type VariantUpdateTaskModelType = {
+  description?: string
+  title?: string
+  completed?: boolean
+  status?: number
+  priority?: number
+  startDate?: string
+  deadline?: string
 }
 export type TasksActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof addTaskAC>
@@ -72,3 +114,4 @@ export type TasksActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof removeTaskAC>
 | ReturnType<typeof setTodolistsAC>
 | ReturnType<typeof setTasksAC>
+| ReturnType<typeof updateTaskAC>

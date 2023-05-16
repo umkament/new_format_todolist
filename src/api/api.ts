@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 
 const settings = {
   withCredentials: true,
@@ -48,6 +48,9 @@ export let taskAPI = {
   },
   setTasks(todolistId: string){
     return instance.get<TaskContentType>(`todo-lists/${todolistId}/tasks`)
+  },
+  updateTask(todolistId: string, taskId: string, taskModel: UpdateTaskModelType){
+return instance.put<UpdateTaskModelType, AxiosResponse<ResponseType<TaskType>>>(`todo-lists/${todolistId}/tasks/${taskId}`, taskModel)
   }
 }
 
@@ -70,15 +73,16 @@ export type TaskContentType = {
   totalCount: number,
   error: string
 }
-//в предыдущем проекте тип тасктайп разбит на две части пока не поняла почему
-export type TaskType = {
+export type UpdateTaskModelType = {
   description: string
   title: string
   completed: boolean
-  status: number
+  status: TaskStatuses
   priority: number
   startDate: string
   deadline: string
+}
+export type TaskType = UpdateTaskModelType & {
   id: string
   todoListId: string
   order: number
