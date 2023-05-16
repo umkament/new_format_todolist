@@ -31,6 +31,11 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
     }
     case "task/SET-TASK":
       return {...state, [action.todolistId]:action.tasks}
+    case "task/UPDATE-TASK":
+      return {
+        ...state,
+        [action.todolistId]:state[action.todolistId].map(t => t.id ===action.taskId ? {...t, ...action.variantModel} : t)
+      }
 
     default:
       return state
@@ -47,15 +52,15 @@ export const updateTaskAC = (todolistId: string, taskId: string, variantModel: V
 //thunks
 export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch)=>{
  taskAPI.addTask(todolistId, title).then(res=>{
-   if(res.resultCode === 0) {
-     dispatch(addTaskAC(res.data.item))
+   if(res.data.resultCode === 0) {
+     dispatch(addTaskAC(res.data.data.item))
    }
  })
 }
 export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkType => (dispatch)=>{
   taskAPI.removeTask(todolistId,taskId).then(res=>{
     if (res.data.resultCode===0){
-      dispatch(removeTaskTC(todolistId,taskId))
+      dispatch(removeTaskAC(todolistId,taskId))
     }
   })
 }

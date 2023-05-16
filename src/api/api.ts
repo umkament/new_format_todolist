@@ -41,7 +41,7 @@ return instance.get<TodolistType[]>('todo-lists')
 
 export let taskAPI = {
   addTask(todolistId: string, title: string){
-    return instance.post<{title: string}, ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title})
+    return instance.post<{title: string}, AxiosResponse<ResponseType<{item: TaskType}>>>(`todo-lists/${todolistId}/tasks`, {title})
   },
   removeTask(todolistId: string, taskId: string){
     return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
