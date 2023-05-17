@@ -14,10 +14,10 @@ const instance = axios.create({
 //api
 export let authAPI = {
   logIn(params: LoginParamsType){
-    return instance.post<ResponseType<{userId: number}>>('auth/login', params)
+    return instance.post<ResponseType<{userId?: number}>>('auth/login', params)
   },
   logOut(){
-    return instance.delete<ResponseType>('auth/login') //пока не добавляю в респонсе юзерайди
+    return instance.delete<ResponseType<{userId?: number}>>('auth/login')
   },
   me(){
     return instance.get<ResponseType<{id:number, email:string, login:string}>>('auth/me')
@@ -88,21 +88,22 @@ export type TaskType = UpdateTaskModelType & {
   order: number
   addedDate: string
 }
-
 export enum TaskStatuses {
   New,
   InProgress,
   Completed,
   Draft
 }
-export type FilterValueType = 'all' | 'active' | 'completed'
-
 export type TodolistType = {
   id: string
   addedDate: string
   order: number
   title: string
 }
+export type FilterValueType = 'all' | 'active' | 'completed'
+export type RequestStatusType = 'idle' | 'loading' | 'success' | 'failed'
 export type TodolistDomainType = TodolistType & {
-  filter: FilterValueType
+  filter: FilterValueType,
+  todoStatus: RequestStatusType
+
 }

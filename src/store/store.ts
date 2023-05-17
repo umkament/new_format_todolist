@@ -6,6 +6,7 @@ import {LoginActionType, loginReducer} from "../state/login-reducer";
 import {AppActionType, appReducer} from "../state/app-reducer";
 import {TodolistsActionType, todolistsReducer} from "../state/todolists-reducer";
 import {TasksActionType, tasksReducer} from "../state/tasks-reducer";
+
 //reducer
 const rootReducer = combineReducers({
   auth: loginReducer,

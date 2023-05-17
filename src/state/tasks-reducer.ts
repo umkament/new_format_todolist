@@ -36,7 +36,6 @@ export const tasksReducer = (state: TasksStateType = InitialState, action: Tasks
         ...state,
         [action.todolistId]:state[action.todolistId].map(t => t.id ===action.taskId ? {...t, ...action.variantModel} : t)
       }
-
     default:
       return state
   }

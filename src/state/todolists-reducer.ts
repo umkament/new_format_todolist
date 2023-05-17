@@ -1,5 +1,5 @@
 import {CommonThunkType} from "../store/store";
-import {FilterValueType, TodolistDomainType, todolistsAPI, TodolistType} from "../api/api";
+import {FilterValueType, RequestStatusType, TodolistDomainType, todolistsAPI, TodolistType} from "../api/api";
 
 
 
@@ -10,15 +10,17 @@ export const todolistsReducer = (state: TodolistDomainType[] = InitialState, act
   switch (action.type) {
     case "todolist/ADD-TODOLIST":
       // не забыть про entityStatus: 'idle'
-      return [{...action.todolist, filter: 'all'}, ...state] // не понимаю почему копию тудулиста добавляем?
+      return [{...action.todolist, filter: 'all', todoStatus: 'idle'}, ...state] // не понимаю почему копию тудулиста добавляем?
     case "todolist/REMOVE-TODOLIST":
       return state.filter(tl => tl.id !== action.todolistId)
     case "todolist/SET-TODOLISTS":
-      return action.todolists.map(tl=>({...tl, filter: 'all'}))
+      return action.todolists.map(tl=>({...tl, filter: 'all', todoStatus: 'idle'}))
     case "todolist/CHANGE-TODOLIST-TITLE":
       return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.newTodoTitle} : tl)
     case "todolist/CHANGE-TODOLIST-FILTER":
       return state.map(tl => tl.id === action.todolistId ? {...tl, filter: action.filter} : tl)
+    case "todolist/CHANGE-TODOLIST-STATUS":
+      return state.map(tl=> tl.id === action.todolistId ? {...tl, todoStatus: action.todoStatus} : tl)
     default:
       return state
   }
@@ -30,6 +32,7 @@ export const removeTodolistAC = (todolistId: string)=>({type: 'todolist/REMOVE-T
 export const setTodolistsAC = (todolists: TodolistType[])=>({type: 'todolist/SET-TODOLISTS', todolists} as const)
 export const changeTodolistTitleAC = (todolistId: string, newTodoTitle: string)=>({type: 'todolist/CHANGE-TODOLIST-TITLE', todolistId, newTodoTitle} as const)
 export const changeTodolistFilterAC = (todolistId: string, filter: FilterValueType)=>({type: 'todolist/CHANGE-TODOLIST-FILTER', todolistId, filter} as const)
+export const changeTodolistStatusAC = (todolistId: string, todoStatus: RequestStatusType)=>({type: 'todolist/CHANGE-TODOLIST-STATUS', todolistId, todoStatus} as const)
 
 //thunks
 // в дальнейшем не забыть в санки добавить статус загрузки, ошибки и .catch
@@ -66,3 +69,4 @@ export type TodolistsActionType = ReturnType<typeof addTodolistAC>
 | ReturnType<typeof setTodolistsAC>
 | ReturnType<typeof changeTodolistTitleAC>
 | ReturnType<typeof changeTodolistFilterAC>
+| ReturnType<typeof changeTodolistStatusAC>
