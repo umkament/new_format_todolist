@@ -1,5 +1,9 @@
 import {CommonThunkType} from "../store/store";
 import {FilterValueType, RequestStatusType, TodolistDomainType, todolistsAPI, TodolistType} from "../api/api";
+import {setAppStatusAC} from "./app-reducer";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 
 
@@ -37,23 +41,38 @@ export const changeTodolistStatusAC = (todolistId: string, todoStatus: RequestSt
 //thunks
 // в дальнейшем не забыть в санки добавить статус загрузки, ошибки и .catch
 export const addTodolistTC = (title: string): CommonThunkType => (dispatch)=>{
-todolistsAPI.addTodolist(title).then(res =>{
+
+  todolistsAPI.addTodolist(title).then(res =>{
   if (res.data.resultCode === 0) {
     dispatch(addTodolistAC(res.data.data.item))
+  } else {
+    handleServerAppError(res.data, dispatch)
   }
 })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 export const removeTodolistTC = (todolistId: string): CommonThunkType =>(dispatch) => {
- todolistsAPI.removeTodolist(todolistId).then(res=>{
+
+  todolistsAPI.removeTodolist(todolistId).then(res=>{
    if(res.data.resultCode===0){
      dispatch(removeTodolistAC(todolistId))
    }
  })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 export const setTodolistsTC = (): CommonThunkType =>(dispatch)=>{
+  dispatch(setAppStatusAC('loading'))
   todolistsAPI.setTodolists().then(res=>{
     dispatch(setTodolistsAC(res.data))
+    dispatch(setAppStatusAC('success'))
   })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 export const changeTodolistTitleTC = (todolistId: string, newTodoTitle: string): CommonThunkType=>(dispatch)=>{
   todolistsAPI.updateTodolist(todolistId, newTodoTitle).then(res=>{

@@ -33,7 +33,6 @@ export function ErrorSnackBar() {
            {error}
          </Alert>
        </Snackbar>
-       <Alert severity="success">the app works without problems</Alert>
      </Stack>
   );
 }

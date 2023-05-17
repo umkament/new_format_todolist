@@ -1,6 +1,7 @@
 import {CommonThunkType, RootStateType} from "../store/store";
 import {taskAPI, TaskType, UpdateTaskModelType} from "../api/api";
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
+import {handleServerNetworkError} from "../utils/error-utils";
 
 
 const InitialState: TasksStateType = {}
@@ -55,6 +56,9 @@ export const addTaskTC = (todolistId: string, title: string): CommonThunkType =>
      dispatch(addTaskAC(res.data.data.item))
    }
  })
+    .catch(error=>{
+      handleServerNetworkError(error, dispatch)
+    })
 }
 export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkType => (dispatch)=>{
   taskAPI.removeTask(todolistId,taskId).then(res=>{
