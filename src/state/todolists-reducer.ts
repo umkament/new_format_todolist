@@ -1,10 +1,7 @@
 import {CommonThunkType} from "../store/store";
 import {FilterValueType, RequestStatusType, TodolistDomainType, todolistsAPI, TodolistType} from "../api/api";
 import {setAppStatusAC} from "./app-reducer";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-
 
 
 const InitialState: TodolistDomainType[] = []
@@ -13,7 +10,6 @@ const InitialState: TodolistDomainType[] = []
 export const todolistsReducer = (state: TodolistDomainType[] = InitialState, action: TodolistsActionType): TodolistDomainType[] =>{
   switch (action.type) {
     case "todolist/ADD-TODOLIST":
-      // не забыть про entityStatus: 'idle'
       return [{...action.todolist, filter: 'all', todoStatus: 'idle'}, ...state] // не понимаю почему копию тудулиста добавляем?
     case "todolist/REMOVE-TODOLIST":
       return state.filter(tl => tl.id !== action.todolistId)

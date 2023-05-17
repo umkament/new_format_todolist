@@ -1,10 +1,17 @@
+import React, {useEffect} from 'react'
+import Grid from '@mui/material/Grid';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
-import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, TextField} from "@mui/material";
-import {useCommonDispatch, useCommonSelector} from "../store/store";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import {useFormik} from "formik";
+import {useCommonDispatch, useCommonSelector} from "../store/store";
 import {logInTC} from "../state/login-reducer";
 import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+
 
 type LoginPropsType={}
 
@@ -32,20 +39,24 @@ export const Login: React.FC<LoginPropsType> = (props)=>{
         }
     }
   })
+
   let navigate = useNavigate();
 useEffect(()=>{
   if (isLoggedIn) {return navigate('/')}
 },[isLoggedIn])
 
-
   return<Grid container justifyContent={'center'}>
   <Grid item justifyContent={'center'}>
-    <form>
+    <form onSubmit={formik.handleSubmit}>
       <FormControl>
 
      <FormLabel>
        <p>to log in get registered
-       <a href={'https://social-network.samuraijs.com/'} target={'_blank'}> here</a>
+       <a href={'https://social-network.samuraijs.com/'}
+          target={'_blank'}
+       >
+         here
+       </a>
        </p>
        <p>or use common test account credentials:</p>
        <p>Email: free@samuraijs.com</p>
@@ -55,18 +66,18 @@ useEffect(()=>{
         <FormGroup>
           <TextField label='Email'
                      margin='normal'
-             {...formik.getFieldHelpers('email')} //не помню для чего это нужно
+             {...formik.getFieldProps('email')} //не помню для чего это нужно
           />
           {formik.errors.email ? <div>{formik.errors.email}</div> : null}
              <TextField type='password'
                         label='Password'
                         margin='normal'
-                        {...formik.getFieldHelpers('password')}
+                        {...formik.getFieldProps('password')}
              />
-          {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+          {formik.errors.password ? <div>{formik.errors.password}</div> : null}
                 <FormControlLabel label='Remember me'
                                   control={<Checkbox
-                                     {...formik.getFieldHelpers('rememberMe')}
+                                     {...formik.getFieldProps('rememberMe')}
                                      checked={formik.values.rememberMe}
                                   />}
                 />
@@ -81,6 +92,4 @@ useEffect(()=>{
     </form>
   </Grid>
   </Grid>
-
-
 }

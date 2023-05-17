@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderPropsType> = (props) => {
 
   const logOutHandler = useCallback(() => {
     dispatch(logOutTC())
-  }, [])
+  }, [dispatch])
 
   if (!initialized) {
     return <LinearProgress/>

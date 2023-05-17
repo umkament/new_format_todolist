@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Header} from "../components/Header";
+import {BrowserRouter} from "react-router-dom";
 
 
 type AppPropsType={
@@ -9,11 +10,9 @@ type AppPropsType={
 
 export const App: React.FC<AppPropsType> = (props) => {
 
-  return (
-     <div>
+  return <BrowserRouter>
        <Header demo={props.demo}/>
-     </div>
-  );
+     </BrowserRouter>
 }
 
 
