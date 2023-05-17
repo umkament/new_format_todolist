@@ -8,6 +8,7 @@ import {Routes, Route} from "react-router-dom";
 import {Login} from "./Login";
 import {Todolist} from "./Todolist";
 import {TodolistList} from "./TodolistList";
+import {ErrorSnackBar} from "./errorSnackBar";
 
 
 type HeaderPropsType = {
@@ -94,6 +95,7 @@ export const Header: React.FC<HeaderPropsType> = (props) => {
            <Route path='/login' element={<Login/>}/>
          <Route path='/' element={<TodolistList/>}/>
          </Routes>
+         <ErrorSnackBar/>
        </Container>
      </Box>
   )
