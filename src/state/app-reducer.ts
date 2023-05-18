@@ -1,6 +1,7 @@
 import {CommonThunkType} from "../store/store";
 import {authAPI, RequestStatusType} from "../api/api";
 import {setIsLoggedInAC} from "./login-reducer";
+import {handleServerNetworkError} from "../utils/error-utils";
 
 
 const InitialState: AppStateType = {
@@ -36,6 +37,9 @@ export const initializedAppTC = (): CommonThunkType => (dispatch) => {
     }
     dispatch(setAppInitializedAC(true))
   })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 
 //types

@@ -1,7 +1,8 @@
 import {CommonThunkType, RootStateType} from "../store/store";
 import {taskAPI, TaskType, UpdateTaskModelType} from "../api/api";
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
-import {handleServerNetworkError} from "../utils/error-utils";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {setAppStatusAC} from "./app-reducer";
 
 
 const InitialState: TasksStateType = {}
@@ -51,9 +52,13 @@ export const updateTaskAC = (todolistId: string, taskId: string, variantModel: V
 
 //thunks
 export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch)=>{
- taskAPI.addTask(todolistId, title).then(res=>{
+  dispatch(setAppStatusAC('loading'))
+  taskAPI.addTask(todolistId, title).then(res=>{
    if(res.data.resultCode === 0) {
      dispatch(addTaskAC(res.data.data.item))
+     dispatch(setAppStatusAC('success'))
+   } else {
+     handleServerAppError(res.data, dispatch)
    }
  })
     .catch(error=>{
@@ -61,16 +66,26 @@ export const addTaskTC = (todolistId: string, title: string): CommonThunkType =>
     })
 }
 export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkType => (dispatch)=>{
+  dispatch(setAppStatusAC('loading'))
   taskAPI.removeTask(todolistId,taskId).then(res=>{
     if (res.data.resultCode===0){
       dispatch(removeTaskAC(todolistId,taskId))
+      dispatch(setAppStatusAC('success'))
     }
   })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 export const setTasksTC = (todolistId: string): CommonThunkType =>(dispatch)=>{
+  dispatch(setAppStatusAC('loading'))
   taskAPI.setTasks(todolistId).then(res=>{
     dispatch(setTasksAC(todolistId, res.data.items))
+    dispatch(setAppStatusAC('success'))
   })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 export const updateTaskTC = (todolistId: string, taskId: string, variantModel: VariantUpdateTaskModelType): CommonThunkType =>{
   return (dispatch, getState: ()=>RootStateType)=> {
@@ -96,8 +111,13 @@ export const updateTaskTC = (todolistId: string, taskId: string, variantModel: V
        .then(res => {
       if (res.data.resultCode === 0) {
         dispatch(updateTaskAC(todolistId, taskId, apiTaskModel))
+      } else {
+        handleServerAppError(res.data, dispatch)
       }
     })
+       .catch(error=>{
+         handleServerNetworkError(error, dispatch)
+       })
   }
   }
 

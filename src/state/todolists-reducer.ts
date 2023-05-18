@@ -37,10 +37,11 @@ export const changeTodolistStatusAC = (todolistId: string, todoStatus: RequestSt
 //thunks
 // в дальнейшем не забыть в санки добавить статус загрузки, ошибки и .catch
 export const addTodolistTC = (title: string): CommonThunkType => (dispatch)=>{
-
+dispatch(setAppStatusAC('loading'))
   todolistsAPI.addTodolist(title).then(res =>{
   if (res.data.resultCode === 0) {
     dispatch(addTodolistAC(res.data.data.item))
+    dispatch(setAppStatusAC('success'))
   } else {
     handleServerAppError(res.data, dispatch)
   }
@@ -50,10 +51,11 @@ export const addTodolistTC = (title: string): CommonThunkType => (dispatch)=>{
      })
 }
 export const removeTodolistTC = (todolistId: string): CommonThunkType =>(dispatch) => {
-
+  dispatch(setAppStatusAC('loading'))
   todolistsAPI.removeTodolist(todolistId).then(res=>{
    if(res.data.resultCode===0){
      dispatch(removeTodolistAC(todolistId))
+     dispatch(setAppStatusAC('success'))
    }
  })
      .catch(error=>{
@@ -76,6 +78,9 @@ export const changeTodolistTitleTC = (todolistId: string, newTodoTitle: string):
       dispatch(changeTodolistTitleAC(todolistId,newTodoTitle))
     }
   })
+     .catch(error=>{
+       handleServerNetworkError(error, dispatch)
+     })
 }
 
 //types
