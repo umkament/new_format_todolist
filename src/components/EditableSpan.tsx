@@ -1,20 +1,20 @@
 import React, {ChangeEvent, useState} from 'react'
 import {TextField} from "@mui/material";
 
-type EditableSpanPropsType ={
-title: string,
-  onChange: (newTitle: string)=>void
+type EditableSpanPropsType = {
+  title: string,
+  onChange: (newTitle: string) => void
 }
 
-export const EditableSpan: React.FC<EditableSpanPropsType> =(props)=>{
+export const EditableSpan: React.FC<EditableSpanPropsType> = (props) => {
   let [editMode, setEditMode] = useState<boolean>(false)
   let [title, setTitle] = useState<string>('')
 
-  const activateEditMode = ()=>{
+  const activateEditMode = () => {
     setEditMode(true)
     setTitle(props.title)
   }
-  const deactivateEditMode = ()=>{
+  const deactivateEditMode = () => {
     setEditMode(false)
     props.onChange(title)
   }

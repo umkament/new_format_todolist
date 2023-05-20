@@ -4,7 +4,7 @@ import {ChangeEvent, KeyboardEvent, useState} from "react";
 
 
 type AddItemFormPropsType = {
-  addItem: (title: string)=>void
+  addItem: (title: string) => void
 }
 export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
   let [title, setTitle] = useState<string>('')
@@ -20,22 +20,22 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
       addItem(title.trim())
       setTitle('')
     }
-    if (e.charCode===13 && title.trim() === ''){
+    if (e.charCode === 13 && title.trim() === '') {
       setError('title is required')
     }
   }
 
   const addTitleButtonHandler = () => {
-  if (title.trim() !== '') {
-    addItem(title.trim())
-    setTitle('')
-  } else {
-    setError('title is required')
-  }
+    if (title.trim() !== '') {
+      addItem(title.trim())
+      setTitle('')
+    } else {
+      setError('title is required')
+    }
   }
 
-  return<div>
-  {/*  //не забыть задизейблить поле на момент обновления*/}
+  return <div>
+    {/*  //не забыть задизейблить поле на момент обновления*/}
     <TextField value={title}
                onChange={changeTitleHandler}
                onKeyPress={keyPressHandler}
@@ -44,7 +44,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
                error={!!error}
                helperText={error}
     />
-   {/* //не забыть задизейблить кнопку*/}
+    {/* //не забыть задизейблить кнопку*/}
     <IconButton onClick={addTitleButtonHandler}>
       <LibraryAdd/>
     </IconButton>
