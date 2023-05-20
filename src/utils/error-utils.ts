@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 import {setAppErrorAC, setAppStatusAC} from "../state/app-reducer";
 
 
-export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch)=>{
+export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
   if (data.messages.length) {
     dispatch(setAppErrorAC(data.messages[0]))
   } else {
@@ -12,7 +12,7 @@ export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatc
   dispatch(setAppStatusAC('failed'))
 }
 
-export const handleServerNetworkError = (error: {message: string}, dispatch: Dispatch) => {
-  dispatch(setAppErrorAC(error.message ? error.message: 'some error occured'))
+export const handleServerNetworkError = (error: { message: string }, dispatch: Dispatch) => {
+  dispatch(setAppErrorAC(error.message ? error.message : 'some error occured'))
   dispatch(setAppStatusAC('failed'))
 }
