@@ -33,7 +33,7 @@ export const Login = () => {
         }
       if (!values.password)
         return {
-          email: 'password is required',
+          password: 'password is required',
         }
     }
   })

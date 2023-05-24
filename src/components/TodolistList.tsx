@@ -73,7 +73,8 @@ export const TodolistList: React.FC<TodolistListPropsType> = (props) => {
           alignItems="flex-start"
           style={{padding: '25px'}}
     >
-      <AddItemForm addItem={addTodolist}/>
+      <AddItemForm addItem={addTodolist}
+      />
     </Grid>
     <Grid container
           style={{padding: '25px'}}

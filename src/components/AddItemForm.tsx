@@ -5,8 +5,9 @@ import {ChangeEvent, KeyboardEvent, useState} from "react";
 
 type AddItemFormPropsType = {
   addItem: (title: string) => void
+  disabled?: boolean
 }
-export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
+export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem, disabled}) => {
   let [title, setTitle] = useState<string>('')
   let [error, setError] = useState<string>('')
 
@@ -43,9 +44,12 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
                label={'type title'}
                error={!!error}
                helperText={error}
+               disabled={disabled}
     />
     {/* //не забыть задизейблить кнопку*/}
-    <IconButton onClick={addTitleButtonHandler}>
+    <IconButton onClick={addTitleButtonHandler}
+                disabled={disabled}
+    >
       <LibraryAdd/>
     </IconButton>
   </div>
