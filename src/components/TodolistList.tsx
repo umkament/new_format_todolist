@@ -97,6 +97,8 @@ export const TodolistList: React.FC<TodolistListPropsType> = (props) => {
                          changeTaskTitle={changeTaskTitle}
                          changeTaskStatus={changeTaskStatus}
                          demo={props.demo}
+                         filter={tl.filter}
+                         todoStatus={tl.todoStatus}
 
                />
              </Paper>

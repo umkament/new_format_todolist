@@ -64,6 +64,7 @@ export const addTodolistTC = (title: string): CommonThunkType => (dispatch) => {
 }
 export const removeTodolistTC = (todolistId: string): CommonThunkType => (dispatch) => {
   dispatch(setAppStatusAC('loading'))
+  dispatch(changeTodolistStatusAC(todolistId, 'loading'))
   todolistsAPI.removeTodolist(todolistId).then(res => {
     if (res.data.resultCode === 0) {
       dispatch(removeTodolistAC(todolistId))
@@ -71,6 +72,8 @@ export const removeTodolistTC = (todolistId: string): CommonThunkType => (dispat
     }
   })
      .catch(error => {
+       dispatch(setAppStatusAC('failed'))
+       dispatch(changeTodolistStatusAC(todolistId, 'failed'))
        handleServerNetworkError(error, dispatch)
      })
 }

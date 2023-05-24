@@ -107,5 +107,4 @@ export type RequestStatusType = 'idle' | 'loading' | 'success' | 'failed'
 export type TodolistDomainType = TodolistType & {
   filter: FilterValueType,
   todoStatus: RequestStatusType
-
 }
