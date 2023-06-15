@@ -65,11 +65,11 @@ export const updateTaskAC = (todolistId: string, taskId: string, variantModel: V
 
 //thunks
 export const addTaskTC = (todolistId: string, title: string): CommonThunkType => (dispatch) => {
-  dispatch(setAppStatusAC('loading'))
+  dispatch(setAppStatusAC({status: 'loading'}))
   taskAPI.addTask(todolistId, title).then(res => {
     if (res.data.resultCode === 0) {
       dispatch(addTaskAC(res.data.data.item))
-      dispatch(setAppStatusAC('success'))
+      dispatch(setAppStatusAC({status: 'success'}))
     } else {
       handleServerAppError(res.data, dispatch)
     }
@@ -79,11 +79,11 @@ export const addTaskTC = (todolistId: string, title: string): CommonThunkType =>
      })
 }
 export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkType => (dispatch) => {
-  dispatch(setAppStatusAC('loading'))
+  dispatch(setAppStatusAC({status: 'loading'}))
   taskAPI.removeTask(todolistId, taskId).then(res => {
     if (res.data.resultCode === 0) {
       dispatch(removeTaskAC(todolistId, taskId))
-      dispatch(setAppStatusAC('success'))
+      dispatch(setAppStatusAC({status: 'success'}))
     }
   })
      .catch(error => {
@@ -91,10 +91,10 @@ export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkTyp
      })
 }
 export const setTasksTC = (todolistId: string): CommonThunkType => (dispatch) => {
-  dispatch(setAppStatusAC('loading'))
+  dispatch(setAppStatusAC({status: 'loading'}))
   taskAPI.setTasks(todolistId).then(res => {
     dispatch(setTasksAC(todolistId, res.data.items))
-    dispatch(setAppStatusAC('success'))
+    dispatch(setAppStatusAC({status: 'success'}))
   })
      .catch(error => {
        handleServerNetworkError(error, dispatch)
