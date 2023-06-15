@@ -1,11 +1,11 @@
-import {applyMiddleware, combineReducers} from "redux";
-import {legacy_createStore as createStore} from 'redux'
+import {combineReducers} from "redux";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import thunk, {ThunkDispatch, ThunkAction} from 'redux-thunk'
+import thunkMiddleware, {ThunkAction, ThunkDispatch} from 'redux-thunk'
 import {LoginActionType, loginReducer} from "../state/login-reducer";
 import {AppActionType, appReducer} from "../state/app-reducer";
 import {TodolistsActionType, todolistsReducer} from "../state/todolists-reducer";
 import {TasksActionType, tasksReducer} from "../state/tasks-reducer";
+import {configureStore} from "@reduxjs/toolkit";
 
 //reducer
 const rootReducer = combineReducers({
@@ -16,7 +16,12 @@ const rootReducer = combineReducers({
 })
 
 //store
-export const store = createStore(rootReducer, applyMiddleware(thunk))
+//export const store = createStore(rootReducer, applyMiddleware(thunk))
+
+export const store = configureStore({
+  reducer: rootReducer,
+     middleware: getDefaultMiddleware=> getDefaultMiddleware().prepend(thunkMiddleware)
+})
 
 //types
 export type RootStateType = ReturnType<typeof rootReducer>
