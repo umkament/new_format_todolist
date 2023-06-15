@@ -33,7 +33,7 @@ export const setAppErrorAC = (error: string | null) => ({type: 'app/SET-ERROR', 
 export const initializedAppTC = (): CommonThunkType => (dispatch) => {
   authAPI.me().then(res => {
     if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(true))
+      dispatch(setIsLoggedInAC({value: true}))
     }
     dispatch(setAppInitializedAC(true))
   })

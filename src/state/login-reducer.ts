@@ -2,30 +2,35 @@ import {CommonThunkType} from "../store/store";
 import {authAPI, LoginParamsType} from "../api/api";
 import {setAppStatusAC} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
-
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const InitialState = {
   isLoggedIn: false
 }
 
-//reducer
-export const loginReducer = (state: LoginStateType = InitialState, action: LoginActionType): LoginStateType => {
-  switch (action.type) {
-    case 'login/SET-IS-LOGGED-IN':
-      return {...state, isLoggedIn: action.value}
-    default:
-      return state
+const slice = createSlice({
+  name: 'login',
+  initialState: InitialState,
+  reducers: {
+    setIsLoggedInAC(state, action: PayloadAction<{value: boolean}>){
+      state.isLoggedIn = action.payload.value
+    }
   }
-}
+})
+
+
+//reducer
+export const loginReducer = slice.reducer
+
 //actions
-export const setIsLoggedInAC = (value: boolean) => ({type: 'login/SET-IS-LOGGED-IN', value} as const)
+export const {setIsLoggedInAC} = slice.actions
 
 //thunks
 export const logInTC = (params: LoginParamsType): CommonThunkType => (dispatch) => {
   dispatch(setAppStatusAC('loading'))
   authAPI.logIn(params).then(res => {
     if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(true))
+      dispatch(setIsLoggedInAC({value: true}))
       dispatch(setAppStatusAC('success'))
     } else {
       handleServerAppError(res.data, dispatch)
@@ -39,7 +44,7 @@ export const logOutTC = (): CommonThunkType => (dispatch) => {
   dispatch(setAppStatusAC('loading'))
   authAPI.logOut().then(res => {
     if (res.data.resultCode === 0) {
-      dispatch(setIsLoggedInAC(false))
+      dispatch(setIsLoggedInAC({value: false}))
       dispatch(setAppStatusAC('success'))
     } else {
       handleServerAppError(res.data, dispatch)
@@ -52,7 +57,4 @@ export const logOutTC = (): CommonThunkType => (dispatch) => {
 
 
 //types
-export type LoginStateType = {
-  isLoggedIn: boolean
-}
 export type LoginActionType = ReturnType<typeof setIsLoggedInAC>
