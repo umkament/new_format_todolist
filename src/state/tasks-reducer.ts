@@ -3,10 +3,36 @@ import {taskAPI, TaskType, UpdateTaskModelType} from "../api/api";
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 const InitialState: TasksStateType = {}
 
+const slice = createSlice({
+  name: 'tasks',
+  initialState: InitialState,
+  reducers: {
+    addTaskAC(state, action: PayloadAction<{task: TaskType}>){
+      state[action.payload.task.todoListId].unshift(action.payload.task)
+    },
+    removeTaskAC(state, action: PayloadAction<{todolistId:  string, taskId: string}>){
+      //в state находим нужный нам массив
+      const tasks = state[action.payload.todolistId]
+       const index = tasks.findIndex(t => t.id === action.payload.taskId)
+      // если index нашелся, тогда удали начина с указанного индекса один элемент
+      if (index > -1){
+        tasks.splice(index,1)
+      }
+    },
+    setTasksAC(state, action: PayloadAction<{todolistId: string, tasks: TaskType[]}>){},
+    updateTaskAC(state, action: PayloadAction<{todolistId: string, taskId: string, variantModel: VariantUpdateTaskModelType}>){}
+  }
+})
+export const tasksReducer = slice.reducer
+export const {addTaskAC, removeTaskAC, setTasksAC, updateTaskAC} = slice.actions
+
+
+/*
 //reducer
 export const tasksReducer = (state: TasksStateType = InitialState, action: TasksActionType): TasksStateType => {
   switch (action.type) {
@@ -61,6 +87,7 @@ export const updateTaskAC = (todolistId: string, taskId: string, variantModel: V
   taskId,
   variantModel
 } as const)
+*/
 
 
 //thunks
@@ -68,7 +95,7 @@ export const addTaskTC = (todolistId: string, title: string): CommonThunkType =>
   dispatch(setAppStatusAC({status: 'loading'}))
   taskAPI.addTask(todolistId, title).then(res => {
     if (res.data.resultCode === 0) {
-      dispatch(addTaskAC(res.data.data.item))
+      dispatch(addTaskAC({task: res.data.data.item}))
       dispatch(setAppStatusAC({status: 'success'}))
     } else {
       handleServerAppError(res.data, dispatch)
@@ -82,7 +109,7 @@ export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkTyp
   dispatch(setAppStatusAC({status: 'loading'}))
   taskAPI.removeTask(todolistId, taskId).then(res => {
     if (res.data.resultCode === 0) {
-      dispatch(removeTaskAC(todolistId, taskId))
+      dispatch(removeTaskAC({todolistId, taskId}))
       dispatch(setAppStatusAC({status: 'success'}))
     }
   })
@@ -93,7 +120,7 @@ export const removeTaskTC = (todolistId: string, taskId: string): CommonThunkTyp
 export const setTasksTC = (todolistId: string): CommonThunkType => (dispatch) => {
   dispatch(setAppStatusAC({status: 'loading'}))
   taskAPI.setTasks(todolistId).then(res => {
-    dispatch(setTasksAC(todolistId, res.data.items))
+    dispatch(setTasksAC({todolistId, tasks: res.data.items}))
     dispatch(setAppStatusAC({status: 'success'}))
   })
      .catch(error => {
@@ -123,7 +150,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, variantModel: V
     taskAPI.updateTask(todolistId, taskId, apiTaskModel)
        .then(res => {
          if (res.data.resultCode === 0) {
-           dispatch(updateTaskAC(todolistId, taskId, apiTaskModel))
+           dispatch(updateTaskAC({todolistId, taskId, variantModel: apiTaskModel}))
          } else {
            handleServerAppError(res.data, dispatch)
          }
