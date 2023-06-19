@@ -1,6 +1,5 @@
 import {CommonThunkType, RootStateType} from "../store/store";
 import {taskAPI, TaskType, UpdateTaskModelType} from "../api/api";
-import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
@@ -24,8 +23,22 @@ const slice = createSlice({
         tasks.splice(index,1)
       }
     },
-    setTasksAC(state, action: PayloadAction<{todolistId: string, tasks: TaskType[]}>){},
-    updateTaskAC(state, action: PayloadAction<{todolistId: string, taskId: string, variantModel: VariantUpdateTaskModelType}>){}
+    setTasksAC(state, action: PayloadAction<{todolistId: string, tasks: TaskType[]}>){
+      state[action.payload.todolistId] = action.payload.tasks
+    },
+    updateTaskAC(state, action: PayloadAction<{todolistId: string, taskId: string, variantModel: VariantUpdateTaskModelType}>){
+      //берем нужный массив тасок по todolistId
+      const tasks = state[action.payload.todolistId]
+      //находим индек нужной таски, после чего по указанному индексу меняем нужную нам таску
+      const index = tasks.findIndex(t => t.id === action.payload.taskId)
+      if (index > -1){
+        //берем таску по индексу и переприсваеваем ей новый объект
+        //который будет состоять из той же таски, что и была раньше
+        //но дополнительно переопределится action.payload.variantModel
+        //поскольку в variantModel сидят те части таски, которые нужно обновить
+        tasks[index]= {...tasks[index], ...action.payload.variantModel}
+      }
+    }
   }
 })
 export const tasksReducer = slice.reducer
@@ -166,7 +179,6 @@ export const updateTaskTC = (todolistId: string, taskId: string, variantModel: V
 export type TasksStateType = {
   [key: string]: TaskType[]
 }
-
 export type VariantUpdateTaskModelType = {
   description?: string
   title?: string
@@ -176,10 +188,14 @@ export type VariantUpdateTaskModelType = {
   startDate?: string
   deadline?: string
 }
-export type TasksActionType = ReturnType<typeof addTodolistAC>
+export type TasksActionType = any
+
+
+/*
+   ReturnType<typeof addTodolistAC>
    | ReturnType<typeof addTaskAC>
    | ReturnType<typeof removeTodolistAC>
    | ReturnType<typeof removeTaskAC>
    | ReturnType<typeof setTodolistsAC>
    | ReturnType<typeof setTasksAC>
-   | ReturnType<typeof updateTaskAC>
+   | ReturnType<typeof updateTaskAC>*/
