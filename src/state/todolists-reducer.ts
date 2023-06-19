@@ -35,13 +35,16 @@ const slice = createSlice({
       const index = state.findIndex(tl=> tl.id === action.payload.todolistId)
       state[index].todoStatus = action.payload.todoStatus
     },
+    clearTodolists(){
+      return []
+    }
   }
 })
 
 //reducer
 export const todolistsReducer = slice.reducer
 //actions
-export const {addTodolistAC, removeTodolistAC, setTodolistsAC, changeTodolistTitleAC, changeTodolistFilterAC, changeTodolistStatusAC} = slice.actions
+export const {addTodolistAC, removeTodolistAC, setTodolistsAC, changeTodolistTitleAC, changeTodolistFilterAC, changeTodolistStatusAC, clearTodolists} = slice.actions
 
 
 //thunks

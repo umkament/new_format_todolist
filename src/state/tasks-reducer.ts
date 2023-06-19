@@ -39,6 +39,9 @@ const slice = createSlice({
         //поскольку в variantModel сидят те части таски, которые нужно обновить
         tasks[index]= {...tasks[index], ...action.payload.variantModel}
       }
+    },
+    clearTasks: ()=>{
+      return {}
     }
   },
   extraReducers: (builder)=>{
@@ -56,7 +59,7 @@ const slice = createSlice({
   }
 })
 export const tasksReducer = slice.reducer
-export const {addTaskAC, removeTaskAC, setTasksAC, updateTaskAC} = slice.actions
+export const {addTaskAC, removeTaskAC, setTasksAC, updateTaskAC, clearTasks} = slice.actions
 
 
 /*

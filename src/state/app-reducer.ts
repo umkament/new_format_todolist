@@ -32,9 +32,7 @@ const slice = createSlice({
 export const appReducer = slice.reducer
 
 //action
-export const {setAppInitializedAC} = slice.actions
-export const {setAppStatusAC} = slice.actions
-export const {setAppErrorAC} = slice.actions
+export const {setAppInitializedAC, setAppStatusAC, setAppErrorAC} = slice.actions
 
 
 /*   (state: AppStateType = InitialState, action: AppActionType): AppStateType => {
@@ -71,6 +69,9 @@ export const initializedAppTC = (): CommonThunkType => (dispatch) => {
 //types
 
 
-export type AppActionType = ReturnType<typeof setAppInitializedAC>
+export type AppActionType = any
+
+/*
+   ReturnType<typeof setAppInitializedAC>
    | ReturnType<typeof setAppStatusAC>
-   | ReturnType<typeof setAppErrorAC>
+   | ReturnType<typeof setAppErrorAC>*/
