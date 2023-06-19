@@ -3,6 +3,7 @@ import {taskAPI, TaskType, UpdateTaskModelType} from "../api/api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {setAppStatusAC} from "./app-reducer";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reducer";
 
 
 const InitialState: TasksStateType = {}
@@ -39,6 +40,19 @@ const slice = createSlice({
         tasks[index]= {...tasks[index], ...action.payload.variantModel}
       }
     }
+  },
+  extraReducers: (builder)=>{
+    builder.addCase(addTodolistAC, (state, action)=>{
+      state[action.payload.todolist.id] = []
+    });
+    builder.addCase(removeTodolistAC, (state, action)=>{
+      delete state[action.payload.todolistId]
+    });
+    builder.addCase(setTodolistsAC, (state, action)=>{
+      action.payload.todolists.forEach(tl => {
+        state[tl.id] = []
+      })
+    })
   }
 })
 export const tasksReducer = slice.reducer
