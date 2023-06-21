@@ -7,20 +7,26 @@ import {addTodolistAC, removeTodolistAC, setTodolistsAC} from "./todolists-reduc
 
 const InitialState: TasksStateType = {}
 
-export const setTasksTC = createAsyncThunk('tasks/setTask', (todolistId: string, thunkAPI)=>{
+export const setTasksTC = createAsyncThunk('tasks/setTask', async (todolistId: string, thunkAPI)=>{
   thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-  return taskAPI.setTasks(todolistId).then(res => {
+  const res = await taskAPI.setTasks(todolistId)
+  const tasks = res.data.items
+  thunkAPI.dispatch(setAppStatusAC({status: 'success'}))
+  return {todolistId, tasks}
+  /* пример записи через then
+  thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
+  return taskAPI.setTasks(todolistId)
+     .then(res => {
     thunkAPI.dispatch(setAppStatusAC({status: 'success'}))
-    return {todolistId, tasks: res.data.items}
+    return {todolistId, tasks: res.data.items}*/
   })
-})
+
 export const removeTaskTC = createAsyncThunk('tasks/removeTask', (param: {todolistId: string, taskId: string}, thunkAPI)=>{
   thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
-   return taskAPI.removeTask(param.todolistId, param.taskId).then(res => {
-
+   return taskAPI.removeTask(param.todolistId, param.taskId)
+      .then(res => {
       thunkAPI.dispatch(setAppStatusAC({status: 'success'}))
       return {todolistId: param.todolistId, taskId: param.taskId}
-
   })
 })
 
