@@ -20,7 +20,6 @@ export const setTasksTC = createAsyncThunk('tasks/setTask', async (todolistId: s
     thunkAPI.dispatch(setAppStatusAC({status: 'success'}))
     return {todolistId, tasks: res.data.items}*/
   })
-
 export const removeTaskTC = createAsyncThunk('tasks/removeTask', (param: {todolistId: string, taskId: string}, thunkAPI)=>{
   thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))
    return taskAPI.removeTask(param.todolistId, param.taskId)

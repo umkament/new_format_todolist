@@ -57,7 +57,8 @@ export let taskAPI = {
 //types
 export type ResponseType<D = {}> = {
   resultCode: number,
-  messages: string,
+  messages: Array<string>,
+  fieldsErrors?: Array<{field: string, error: string}>
   data: D
 }
 

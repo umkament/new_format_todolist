@@ -5,11 +5,9 @@ import {handleServerAppError, handleServerNetworkError} from "../utils/error-uti
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
-const InitialState: TodolistDomainType[] = []
-
 const slice = createSlice({
   name: 'todolists',
-  initialState: InitialState,
+  initialState: [] as TodolistDomainType[],
   reducers: {
     addTodolistAC(state, action: PayloadAction<{todolist: TodolistType}>){
       state.unshift({...action.payload.todolist, filter: 'all', todoStatus: 'idle'})

@@ -12,6 +12,11 @@ import {useCommonDispatch, useCommonSelector} from "../store/store";
 import {logInTC} from "../state/login-reducer";
 import {useNavigate} from "react-router-dom";
 
+export type FormValueType = {
+  email: string,
+  password: string,
+  rememberMe: boolean
+}
 
 export const Login = () => {
   const dispatch = useCommonDispatch()
@@ -23,8 +28,12 @@ export const Login = () => {
       password: '',
       rememberMe: false
     },
-    onSubmit: values => {
-      dispatch(logInTC(values))
+    onSubmit: async (values, formikHelpers) => {
+      const res = await dispatch(logInTC(values))
+      //if (res.type === logInTC.rejected.type){
+      if (logInTC.rejected.match(res)){
+        formikHelpers.setFieldError('email', 'fakeError')
+      }
     },
     validate: (values) => {
       if (!values.email)
@@ -44,6 +53,8 @@ export const Login = () => {
       return navigate('/')
     }
   }, [isLoggedIn])
+
+
 
   return <Grid container justifyContent={'center'}>
     <Grid item justifyContent={'center'}>
